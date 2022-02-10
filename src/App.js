@@ -6,16 +6,18 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import MenuIcon from '@mui/icons-material/Menu';
 import BackspaceIcon from '@mui/icons-material/Backspace';
 import SearchIcon from '@mui/icons-material/Search';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import HomeIcon from '@mui/icons-material/Home';
-
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { Container, Input } from '@mui/material';
+
+import styled from "styled-components";
 
 import './App.css';
 import Footer from './components/Footer';
@@ -48,6 +50,9 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
+
+  // hideable menu
+  const [burgerStatus, setBurgerStatus] = useState(false);  
 
   // const getMovies = async (API) => {
   //   setLoading(true);
@@ -105,7 +110,7 @@ const fetchSearch = (e) => {
     getMovies (SEARCH_API + searchTerm);
 
     document.getElementById("footertext").innerText = "Search Results";
-    
+
   }
   
   setSearchTerm("");
@@ -172,19 +177,17 @@ const handleOpen = () => {
       <div className='header'>
 
         <Container>
-
           <div className="headercontent">
 
-          <Button sx={{color: "rgb(255, 136, 0)", border: 1, borderRadius:1, marginRight: 0.5, textTransform: 'none' }} 
-          variant="outlined" endIcon={<HomeIcon />}
-          onClick={goHome}>
-            Home
-          </Button>
+            <Button sx={{color: "rgb(255, 136, 0)", border: 1, borderRadius:1, marginRight: 0.5, textTransform: 'none' }} 
+            variant="outlined" endIcon={<HomeIcon />}
+            onClick={goHome}>
+              Home
+            </Button>
 
-          <Button sx={{color: "green", border: 1, borderRadius: 1, marginLeft:0.5, textTransform: 'none' }} variant="outlined" >
-            Powered By TMDb
-          </Button>
-
+            <Button sx={{color: "green", border: 1, borderRadius: 1, marginLeft:0.5, textTransform: 'none' }} variant="outlined" >
+              Powered By TMDb
+            </Button>
 
             <div className="disappearing">
 
@@ -245,8 +248,49 @@ const handleOpen = () => {
 
             </div>
 
-          </div>
+            <div>
+                <RightMenu >
+                  <CustomMenu onClick={()=>setBurgerStatus(true)}/>
+                </RightMenu>
 
+                <BurgerNav show={burgerStatus}>
+                  <CloseWrapper>
+                    <CustomClose onClick={()=>setBurgerStatus(false)} />
+                  </CloseWrapper>
+                  <div>
+                    <Button sx={{color: "rgb(255, 136, 0)", border: 1, borderRadius:1, marginLeft: 1, textTransform: 'none' }} 
+                    variant="outlined" endIcon={<VideocamIcon />}
+                    onClick={nowPlaying}>
+                      Now Playing
+                    </Button>
+
+                    <Button sx={{color: "rgb(255, 136, 0)", border: 1, borderRadius: 1, marginLeft: 1, textTransform: 'none' }} 
+                    variant="outlined" endIcon={<WhatshotIcon />} onClick={getTrending}>
+                      Trending
+                    </Button>
+
+                    <Button variant="outlined" endIcon={<StarBorderIcon />} sx={{color: "rgb(255, 136, 0)", border: 1, borderRadius: 1, marginLeft: 1, textTransform: 'none' }} onClick={popularMovies}>
+                      Popular Movies
+                    </Button>
+
+                    <ButtonGroup size="small" variant="outlined" aria-label="outlined button group" sx={{ marginLeft: 1 }} >        
+                      
+                      <Input size="small" id='searchbox'
+                      sx={{color: "rgb(255, 136, 0)", border: 1, borderRadius: 1 }} 
+                      onChange={handleChange} onSubmit={fetchSearch}/>
+
+                      <Button sx={{color: "rgb(255, 136, 0)", border: 1, borderRadius: 1 }} aria-label="delete" endIcon={<BackspaceIcon />} onClick={clearSearch}>
+                      </Button>
+
+                      <Button sx={{color: "rgb(255, 136, 0)", border: 1, borderRadius: 1 }}  aria-label="search" 
+                      endIcon={<SearchIcon />} onClick={fetchSearch}>
+                      </Button>
+
+                    </ButtonGroup>
+                  </div>
+                </BurgerNav>
+            </div>
+          </div>
         </Container>
 
       </div>  
@@ -268,3 +312,54 @@ const handleOpen = () => {
 }
 
 export default App;
+
+
+
+
+const RightMenu = styled.div`
+  display: flex;
+  align-item: center;
+
+  @media (min-width: 700px) {
+      display: none;
+  }
+
+`
+
+
+const CustomMenu = styled(MenuIcon)`
+  cursor: pointer;
+  color: rgb(255, 136, 0);
+  font-size: 60px;
+  border: 1px solid rgb(255, 136, 0);
+`
+
+const BurgerNav = styled.div`
+  position: fixed;
+  top:0;
+  bottom:0;
+  right:0;
+  background: rgba(85, 85, 85, 0.9);
+  width: 300px;
+  z-index: 16;
+  list-style: none;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  transform: ${props => props.show ? 'translateY(0)' : 'translateY(100%)'};
+  transition: transform 0.2s;
+`
+
+const CustomClose = styled(MenuOpenIcon)`
+cursor: pointer;
+color: rgb(255, 136, 0);
+font-size: 60px;
+border: 1px solid rgb(255, 136, 0);
+
+`
+
+const CloseWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
