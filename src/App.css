@@ -77,6 +77,8 @@
   flex-direction: row;
   justify-content: space-around;
   margin: 0;
+
+
 }
 
 .header {
@@ -92,3 +94,32 @@
   justify-content: space-between;
 }
 
+.modalbox {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: black;
+  box-shadow: 24px;
+  color: white;
+}
+
+
+@media (max-width: 768px){
+  .disappearing {
+    display: none;
+  }
+
+  .modalbox {
+  position: 'absolute';
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  background-color: black;
+  box-shadow: 24;
+  color: white;
+  }
+
+}

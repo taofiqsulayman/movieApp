@@ -103,11 +103,12 @@ const fetchSearch = (e) => {
 
   if (searchTerm) {
     getMovies (SEARCH_API + searchTerm);
+
+    document.getElementById("footertext").innerText = "Search Results";
+    
   }
   
   setSearchTerm("");
-
-  document.getElementById("footertext").innerText = "Search Results";
 
 };
 

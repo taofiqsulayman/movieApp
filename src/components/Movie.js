@@ -43,8 +43,8 @@ const Movie = ({title, poster_path, overview, release_date, vote_average, vote_c
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" sx={{ color: "gold" }} variant="h6" component="h2">
+        <Box className='modalbox' sx={style}>
+          <Typography id="modal-modal-title" sx={{ color: "rgb(255, 136, 0)" }} variant="h6" component="h2">
             {title}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -59,7 +59,7 @@ const Movie = ({title, poster_path, overview, release_date, vote_average, vote_c
               </div> 
             </div>
 
-            <div style={{ display: "flex", flexDirection: "row"}}>
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
               <div>
                 <p>Rating: </p>
               </div>
@@ -68,12 +68,12 @@ const Movie = ({title, poster_path, overview, release_date, vote_average, vote_c
               </div> 
             </div>
 
-            <div class="row" style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly"}}>
-              <div>
+            <div class="row" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+              <div style={{ margin: 2 }}>
                 <p>Story: </p>
               </div>
-              <div>
-                <p style={{ color: "#2a9fd6"}}>{overview}</p>
+              <div style={{ margin: 2 }}>
+                <p style={{ color: "#2a9fd6" }}>{overview}</p>
               </div> 
             </div>
 
