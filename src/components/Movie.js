@@ -8,17 +8,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const IMG_API = "https://image.tmdb.org/t/p/w1280";
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  backgroundColor: 'black',
-  boxShadow: 24,
-  p: 4,
-  color: 'white',
-};
 
 
 const Movie = ({title, poster_path, overview, release_date, vote_average, vote_count}) => {
@@ -43,7 +32,7 @@ const Movie = ({title, poster_path, overview, release_date, vote_average, vote_c
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className='modalbox' sx={style}>
+        <Box className='modalbox'>
           <Typography id="modal-modal-title" sx={{ color: "rgb(255, 136, 0)" }} variant="h6" component="h2">
             {title}
           </Typography>
@@ -85,7 +74,7 @@ const Movie = ({title, poster_path, overview, release_date, vote_average, vote_c
 
       <div className="movie-info">
         <h5>{release_date}</h5>
-        <FavoriteIcon />
+        <FavoriteIcon sx={{ color: "whitesmoke", margin: 1 }}/>
       </div>
 
     </div>
