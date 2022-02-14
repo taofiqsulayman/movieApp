@@ -4,17 +4,109 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import PropTypes from 'prop-types';
+import Grid from '@mui/material/Grid';
+import { Button } from '@mui/material';
 
 
 const IMG_API = "https://image.tmdb.org/t/p/w1280";
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'black',
+  border: '1.5px solid #1976d2',
+  boxShadow: 24,
+  p: 4,
+  color: 'white',
+};
 
 
-const Movie = ({title, poster_path, overview, release_date, vote_average, vote_count}) => {
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+      
+        <Typography>{children}</Typography>
+      
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+
+
+
+
+
+const Movie = ({title, poster_path, overview, release_date, vote_average, vote_count, id}) => {
 
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  
+
+  const [value, setValue] = useState(0);
+
+  const [casts, setCasts] = useState([]);
+
+  const handleOpen = () => {
+    setOpen(true);
+    getCast();
+  };
+
+
+
   const handleClose = () => setOpen(false);
+
+  const handleTab = (event, newValue) => {
+    setValue(newValue);
+  };
+
+
+  const getCast = () => {
+
+    const url = `https://api.themoviedb.org/3/movie/${id}/credits?api_key=19a9c9fad8512cbc1824cd036e881463&language=en-US`
+
+    fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      // setCasts(data.results);
+      // cut the first 10 cast members
+      setCasts(data.cast.slice(0, 10));
+    });
+  };
+
+
+
+
+
+
   
   return (
     <div className='movie'>
@@ -31,50 +123,91 @@ const Movie = ({title, poster_path, overview, release_date, vote_average, vote_c
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-      >
-        <Box className='modalbox'>
-          <Typography id="modal-modal-title" sx={{ color: "rgb(255, 136, 0)" }} variant="h6" component="h2">
-            {title}
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          <div style={{backgroundColor: "black"}}>
+        >
 
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-              <div>
-                <p>Released: </p>
+        <Box sx={style}>
+            <Typography id="modal-modal-title" sx={{ color: "rgb(255, 136, 0)" }} variant="h6" component="h2">
+              {title}
+            </Typography>
+
+
+            <Tabs value={value} onChange={handleTab} aria-label="basic tabs example">
+              <Tab sx={{color:"white"}} label="Movie Info" {...a11yProps(0)} />
+              <Tab sx={{color:"white"}} label="Cast" {...a11yProps(1)} />
+            </Tabs>
+
+          <TabPanel value={value} index={0}>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <div style={{backgroundColor: "black"}}>
+                <Grid container spacing={0} columns={4}>
+                  <Grid item xs={1}>
+                    <p>Released: </p>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <p style={{ color: "#1976d2"}}>{release_date}</p>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={0} columns={4}>
+                  <Grid item xs={1}>
+                    <p>Rating: </p>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <p style={{ color: "#1976d2"}}>{vote_average} ({vote_count} votes)</p>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={0} columns={4}>
+                  <Grid item xs={1}>
+                    <p>Story: </p>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <p style={{ color: "#1976d2"}}>{overview}</p>
+                  </Grid>
+                </Grid>
               </div>
-              <div>
-                <p style={{ color: "#2a9fd6"}}>{release_date}</p>
-              </div> 
-            </div>
+            </Typography>
+          </TabPanel>
 
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-              <div>
-                <p>Rating: </p>
-              </div>
-              <div>
-                <p style={{ color: "#2a9fd6"}}>{vote_average}({vote_count} votes)</p>
-              </div> 
-            </div>
 
-            <div class="row" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-              <div style={{ margin: 2 }}>
-                <p>Story: </p>
-              </div>
-              <div style={{ margin: 2 }}>
-                <p style={{ color: "#2a9fd6" }}>{overview}</p>
-              </div> 
-            </div>
+        
+          <TabPanel value={value} index={1}>
+          <>
+            {casts.map((member, index) => {
+              return (
+                <Button
+                  fullWidth
+                  key={index}
+                  data-id={member.id}
+                  data-name={member.name}
+                  color="primary"
+                  sx={{textDecoration: "none", textTransform: "none", textAlign:'left', display:'flex', flexDirection:'row', whiteSpace:'nowrap'}}
+                >{member.name} as <span style={{margin:1.5, padding: 1, textOverflow:'ellipsis', overflow: "hidden", whiteSpace:"nowrap"}}>{member.character}</span></Button>
+              );
+            })}
+          </>
+          </TabPanel>
 
-          </div>
-          </Typography>
+
+
+          <Button fullWidth 
+          sx={{color: "rgb(255, 136, 0)", border: 1, borderRadius:1, textTransform: 'none' }}
+          onClick={handleClose}>
+            Close
+          </Button>
+
+
+
+
+
+          
         </Box>
       </Modal>
       </div>
 
       <div className="movie-info">
         <h5>{release_date}</h5>
-        <FavoriteIcon sx={{ color: "whitesmoke", margin: 1 }}/>
+        <FavoriteIcon sx={{ color: "grey", margin: 1 }}/>
       </div>
 
     </div>

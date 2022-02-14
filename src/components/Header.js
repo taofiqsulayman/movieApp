@@ -137,7 +137,7 @@ const Header = ({getMovies, SEARCH_API, FEATURED_API, NOW_PLAYING, TRENDING, POP
               onChange={handleDropdown}
               size="small"
             >
-              <MenuItem value="">
+              <MenuItem value="none">
               <em>None</em>
               </MenuItem>
               <MenuItem value={DISCOVER_MOVIES}>Discover Movies</MenuItem>

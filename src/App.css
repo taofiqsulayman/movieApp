@@ -94,33 +94,10 @@
   justify-content: space-between;
 }
 
-.modalbox {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
-  padding: 5px;
-  background-color: black;
-  box-shadow: 24px;
-  color: white;
-}
-
 
 @media (max-width: 700px){
   .disappearing {
     display: none;
-  }
-
-  .modalbox {
-  position: 'absolute';
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
-  background-color: black;
-  box-shadow: 24;
-  color: white;
   }
 
 }
